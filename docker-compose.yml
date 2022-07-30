@@ -1,1 +1,8 @@
 version: "3.8"
+
+services:
+  server:
+    image: python:3
+  client:
+    build:
+      dockerfile: Dockerfile_client
