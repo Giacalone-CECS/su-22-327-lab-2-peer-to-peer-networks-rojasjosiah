@@ -1,8 +1,14 @@
 version: "3.8"
 
 services:
-  server:
-    image: python:3
-  client:
+  server_node:
+    container_name: compose_server
+    build: .
+    ports:
+      - "25565:65432"
+  client_node:
+    container_name: compose_client
     build:
       dockerfile: Dockerfile_client
+    ports:
+      - "25566:65432"
