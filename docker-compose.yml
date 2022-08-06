@@ -5,10 +5,8 @@ services:
     container_name: compose_server
     build: .
     ports:
-      - "25565:65432"
+      - "65432:65432"
   client_node:
     container_name: compose_client
     build:
       dockerfile: Dockerfile_client
-    ports:
-      - "25566:65432"
