@@ -3,7 +3,7 @@
 import socket
 import time
 
-HOST = "0.0.0.0"  # The server's hostname or IP address
+HOST = "server"  # The server's hostname or IP address
 PORT = 65432  # The port used by the server
 
 print(f"Attempting to connect to {HOST} on port {PORT}")

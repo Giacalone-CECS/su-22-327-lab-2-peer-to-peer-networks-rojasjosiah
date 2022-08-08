@@ -1,12 +1,25 @@
 version: "3.8"
 
+name: P2P_Network
 services:
-  server_node:
-    container_name: compose_server
+  server:
+    container_name: server1
     build: .
     ports:
       - "65432:65432"
-  client_node:
-    container_name: compose_client
+    networks:
+      - network
+  client:
+    container_name: client1
     build:
       dockerfile: Dockerfile_client
+    networks:
+      - network
+networks:
+  network:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: "172.48.0.0/16"
+          gateway: "172.48.0.1"
