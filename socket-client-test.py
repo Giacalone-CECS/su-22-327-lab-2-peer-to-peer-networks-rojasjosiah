@@ -2,20 +2,42 @@
 
 import time
 import zmq
+import nmap
+import threading
 
-HOST = "server"  # can use DNS here (container name) or actual address
-PORT = "65432"  # The port used by the server
-
-
-def establish_subscribe():
-    context = zmq.Context()			# establishes zmq context
-    s = context.socket(zmq.SUB)     # creates subscriber socket
-    p = "tcp://" + HOST + ":" + PORT
-    s.connect(p)
-    s.setsockopt(zmq.SUBSCRIBE, b"T")		# looks for publishes starting with those bytes
-    for i in range(5):		
-        curr_time = s.recv()
-        print(curr_time.decode())
+host = "server"  # can use DNS here (container name) or actual address
+port = "65432"  # The port used by the server
 
 
-establish_subscribe()
+def establish_subscribe(host, port):
+	context = zmq.Context()			# establishes zmq context
+	s = context.socket(zmq.SUB)     # creates subscriber socket
+	p = "tcp://" + host + ":" + port
+	s.connect(p)
+	s.setsockopt(zmq.SUBSCRIBE, b"T")		# looks for publishes starting with those bytes
+	for i in range(5):		
+		curr_time = s.recv()
+		print(curr_time.decode())
+
+
+nm = nmap.PortScanner()
+nm.scan('172.48.0.0/24', '11111-65435')
+
+peers = []
+
+for each_host in nm.all_hosts():
+	print("Host: " + each_host)							# prints Host: 172.48.0.2
+	print(nm[each_host].all_protocols())					# prints ['tcp']
+    
+	if 'tcp' in nm[each_host].keys():
+		open_ports = nm[each_host]['tcp'].keys()		# stores dict of the open ports
+		print(open_ports)
+		if 65432 in open_ports:                 # uses int for dict vals
+			print(each_host + " has int port 65432")
+			peers.append((each_host, 65432))
+	else:
+		print(each_host + " doesn't have tcp")
+
+
+for peer in peers:
+	establish_subscribe()

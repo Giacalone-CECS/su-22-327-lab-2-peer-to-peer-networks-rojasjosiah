@@ -9,10 +9,19 @@ services:
       - "65432"
     networks:
       - network
+  server2:
+    container_name: server2
+    build: .
+    ports:
+      - "65432"
+    networks:
+      - network
   client:
     container_name: client1
     build:
       dockerfile: Dockerfile_client
+    ports:
+      - "65432"
     networks:
       - network
 networks:

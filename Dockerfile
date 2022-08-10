@@ -1,6 +1,7 @@
 FROM python:3
 
 ADD socket-server-test.py /usr/src/app/
+ADD /files/ /usr/src/app/
 
 WORKDIR /usr/src/app/
 
