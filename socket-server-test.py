@@ -1,20 +1,24 @@
 # socket-server-test.py
 
-import socket
+import time
+import zmq
 
-HOST = "server"  # Standard loopback interface address (localhost)
-PORT = 65432  # Port to listen on (non-privileged ports are > 1023)
+HOST = "0.0.0.0"  
+""" weird docker things. can't bind to traditional localhost address,
+but using 0.0.0.0 works. And for whatever reason, you can't use 
+DNS specifically for bind with zmq (even though you can with socket)
+but you can with connect. """
+PORT = "65432"  # Port to listen on 
 
 
-print(f"Attempting to bind to {HOST} on port {PORT}")
-with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
-	s.bind((HOST, PORT))
-	s.listen()
-	conn, addr = s.accept()
-	with conn:
-		print(f"Connected by {addr}")
-		while True:
-			data = conn.recv(1024)
-			if not data:
-				break
-			conn.sendall(data)
+def establish_publish():
+    context = zmq.Context()
+    s = context.socket(zmq.PUB)     # creates publisher socket
+    p = "tcp://" + HOST + ":" + PORT
+    s.bind(p)						# binds socket to specified port
+    while True:						# sends messages every 5 seconds
+        time.sleep(5)
+        s.send(bytes("Time: " + time.asctime(), 'utf-8'))
+
+
+establish_publish()

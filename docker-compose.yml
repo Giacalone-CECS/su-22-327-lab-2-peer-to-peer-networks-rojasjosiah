@@ -6,7 +6,7 @@ services:
     container_name: server1
     build: .
     ports:
-      - "65432:65432"
+      - "65432"
     networks:
       - network
   client:
