@@ -1,25 +1,31 @@
 version: "3.8"
 
-name: P2P_Network
+name: P2P_Proj
 services:
-  server:
-    container_name: server1
+  node1:
+    container_name: node1
     build: .
     ports:
       - "65432"
     networks:
       - network
-  server2:
-    container_name: server2
+  node2:
+    container_name: node2
     build: .
     ports:
       - "65432"
     networks:
       - network
-  client:
-    container_name: client1
-    build:
-      dockerfile: Dockerfile_client
+  node3:
+    container_name: node3
+    build: .
+    ports:
+      - "65432"
+    networks:
+      - network
+  node4:
+    container_name: node4
+    build: .
     ports:
       - "65432"
     networks:
