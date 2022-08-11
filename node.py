@@ -6,7 +6,7 @@ import nmap
 import threading
 import socket
 
-#######
+#### SERVER ###
 
 HOST = "0.0.0.0"  
 """ weird docker things. can't bind to traditional localhost address,
@@ -50,25 +50,19 @@ nm.scan('172.48.0.0/24', '11111-65435')		# needs wide range for some reason (was
 peers = []
 
 for each_host in nm.all_hosts():
-	print("Host: " + each_host)							# prints Host: 172.48.0.2
-	print(nm[each_host].all_protocols())					# prints ['tcp']
-    
 	if 'tcp' in nm[each_host].keys():
 		open_ports = nm[each_host]['tcp'].keys()		# stores dict of the open ports
-		print(open_ports)
+
 		if 65432 in open_ports:                 # uses int for dict vals
-			print(each_host + " has int port 65432")
+
 			peers.append((each_host, '65432'))
-	else:
-		print(each_host + " doesn't have tcp")
+
 
 threads = []
-print(peers)
-
 
 for peer in peers:			# creates a thread for each publisher
-	threads.append(threading.Thread(target=establish_subscribe, args=(peer[0], port,), daemon=True))
-print(threads)
+	if not peer[0] == socket.gethostbyname(socket.gethostname()): # don't connect to yourself
+		threads.append(threading.Thread(target=establish_subscribe, args=(peer[0], port,), daemon=True))
 for t in threads:
 	t.start()
 

@@ -8,6 +8,8 @@ WORKDIR /usr/src/app/
 COPY requirements.txt ./
 RUN pip install --no-cache-dir -r requirements.txt
 
+ENV PYTHONUNBUFFERED=1
+
 RUN apt-get update
 RUN apt-get install nmap -y
 
