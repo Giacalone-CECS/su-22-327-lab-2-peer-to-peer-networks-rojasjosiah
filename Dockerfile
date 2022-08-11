@@ -1,7 +1,7 @@
 FROM python:3
 
 ADD node.py /usr/src/app/
-ADD /files/ /usr/src/app/
+ADD /files/ /usr/src/app/files/
 
 WORKDIR /usr/src/app/
 
