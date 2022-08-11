@@ -2,6 +2,7 @@
 
 import time
 import zmq
+import socket
 
 HOST = "0.0.0.0"  
 """ weird docker things. can't bind to traditional localhost address,
@@ -18,7 +19,7 @@ def establish_publish():
     s.bind(p)						# binds socket to specified port
     while True:						# sends messages every 5 seconds
         time.sleep(5)
-        s.send(bytes("Time: " + time.asctime(), 'utf-8'))
+        s.send(bytes("FROM " + socket.gethostbyname(socket.gethostname()) + ": Time: " + time.asctime(), 'utf-8'))
 
 
 establish_publish()
